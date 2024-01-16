@@ -181,7 +181,7 @@ class Optimizer(object):
         self.acq_func = acq_func
         self.acq_func_kwargs = acq_func_kwargs
 
-        allowed_acq_funcs = ["gp_hedge", "EI", "LCB", "PI", "EIps", "PIps"]
+        allowed_acq_funcs = ["gp_hedge", "EI", "LCB", "PI", "EIps", "PIps", "EIx"]
         if self.acq_func not in allowed_acq_funcs:
             raise ValueError("expected acq_func to be in %s, got %s" %
                              (",".join(allowed_acq_funcs), self.acq_func))
@@ -551,6 +551,11 @@ class Optimizer(object):
             # of points and then pick the best ones as starting points
             X = self.space.transform(self.space.rvs(
                 n_samples=self.n_points, random_state=self.rng))
+            
+            if self.acq_func == "EIx":
+                # fill all the y value with y[0]
+                X[0, :] = X[0, 0]
+
 
             self.next_xs_ = []
             for cand_acq_func in self.cand_acq_funcs_:

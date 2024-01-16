@@ -46,8 +46,8 @@ def _gaussian_acquisition(X, model, y_opt=None, acq_func="LCB",
         else:
             acq_vals = func_and_grad
 
-    elif acq_func in ["EI", "PI", "EIps", "PIps"]:
-        if acq_func in ["EI", "EIps"]:
+    elif acq_func in ["EI", "PI", "EIps", "PIps", "EIx"]:
+        if acq_func in ["EI", "EIps", "EIx"]:
             func_and_grad = gaussian_ei(X, model, y_opt, xi, return_grad)
         else:
             func_and_grad = gaussian_pi(X, model, y_opt, xi, return_grad)
@@ -273,6 +273,7 @@ def gaussian_ei(X, model, y_opt=0.0, xi=0.01, return_grad=False):
     values : array-like, shape=(X.shape[0],)
         Acquisition function values computed at X.
     """
+
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
 
